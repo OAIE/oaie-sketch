@@ -1,4 +1,4 @@
-# OAIE-Sketch
+# OAIE Sketch
 OAIE Sketch is a browser-based editor for OAS3 spec documents. It offers a side-by-side YAML code editor and visual editor with a focus on tactile feedback, simplicity and performance.
 
 ## Features
