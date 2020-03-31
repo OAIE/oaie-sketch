@@ -3,8 +3,6 @@ OpenAPI Visual Editor
 
 OAIE Sketch offers a side-by-side code editor and visual editor.
 
-OAIE Sketch has an opinion about correct document structure: each schema should be declared as a named schema.
-
 ## Features
 - shows each operation as graph node
 - shows each scheam as graph node
@@ -15,7 +13,7 @@ OAIE Sketch has an opinion about correct document structure: each schema should 
 - detects changes and colors sync buttons
 
 ## VIZ
-Starting documents like this will add a viz (visualisation) into the header (this will show up as a graphic in swagger). Sketch can persist and load entity positions to and from this viz.
+Starting documents like this will add a viz (visualisation) into the header (this will show up as a graphic in swagger):
 
     openapi: "3.0.0"
     info:
@@ -25,10 +23,13 @@ Starting documents like this will add a viz (visualisation) into the header (thi
         My introductory information
         <!--OAIE.viz--><!--/OAIE.viz-->
 
+Sketch can persist and load entity positions to and from this viz (inside the <!--OAIE.viz--> tag).
+
 ![oaie-sketch.png](oaie-sketch.png)
 
 ## Caveats
 - Currently only tested on Chrome.
+- OAIE Sketch has an opinion about correct document structure: each schema should be declared as a named schema.
 - local storage is used as persistence. this means that currently it is only feasible to edit one spec at a time (much like the Swagger online editor).
 
 ## TODO
