@@ -14,7 +14,7 @@ OAIE Sketch is a browser-based editor for OAS3 spec documents. It offers a side-
 - sync graph into yaml, sync yaml into graph
 - auto-save in localstorage of browser
 
-![oaie-sketch.png](Screenshot of OAIE Sketch)
+![oaie-sketch.png](oaie-sketch.png)
 
 ## Opinionated OAS3 YAML
 Requests, Responses and sub-objects should be their own schema definitions. Note that this is best practice anyway if you ever want to generate classes from your spec.
