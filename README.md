@@ -12,6 +12,7 @@ OAIE Sketch offers a side-by-side YAML code editor and visual editor with a focu
 - can add a "baked" viz into the document as a viewer storage
 - uses viz as metadata (node position) storage
 - sync graph into yaml, sync yaml into graph
+- auto-save in localstorage of browser
 
 ![oaie-sketch.png](oaie-sketch.png)
 
