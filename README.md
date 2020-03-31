@@ -38,6 +38,21 @@ Requests, Responses and sub-objects should be their own schema definitions. Note
               type: string
             skuPattern:
               type: string
+        Spec:
+          description: OAIE.noInArrows
+          properties:
+            id:
+              type: string
+            schedules:
+              type: array
+              items:
+                $ref: '#/components/schemas/Schedule'
+        Schedule:
+          properties:
+            method:
+              type: string
+            expression:
+              type: string
 
 ## VIZ
 Starting documents like this will add a viz (visualisation) into the header (this will show up as a graphic in swagger):
