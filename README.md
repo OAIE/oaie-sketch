@@ -78,14 +78,4 @@ Sketch can persist and load entity positions to and from this viz (inside the <!
 - documentation
 - find contributors
 - marketing
-- restructure project
-- refactor into smaller units
-- integrate CodeMirror as editor with yaml tooling
-- allow multi-project workflows within the same browser
-- show circular references
-- git integration
-- server for local self-hosting
-- global site with hosting
-- support yaml features (includes)
-- validation
-- ...
+- see Project tab for planned features
