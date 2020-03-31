@@ -15,6 +15,30 @@ OAIE Sketch offers a side-by-side YAML code editor and visual editor with a focu
 
 ![oaie-sketch.png](oaie-sketch.png)
 
+## Opinionated OAS3 YAML
+Requests, Responses and sub-objects should be their own schema definitions. Note that this is best practice anyway if you ever want to generate classes from your spec.
+
+    components:
+      schemas:
+        CapabilitiesRequest:
+          required:
+            - spec
+          properties:
+            spec:
+              $ref: '#/components/schemas/Spec'
+        CapabilitiesResponse:
+          properties:
+            capabilities:
+              type: array
+              items:
+                $ref: '#/components/schemas/Capability'
+        Capability:
+          properties:
+            method:
+              type: string
+            skuPattern:
+              type: string
+
 ## VIZ
 Starting documents like this will add a viz (visualisation) into the header (this will show up as a graphic in swagger):
 
