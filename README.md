@@ -1,5 +1,5 @@
 # OAIE-Sketch
-OAIE Sketch offers a side-by-side YAML code editor and visual editor with a focus on tactile feedback, simplicity and performance.
+OAIE Sketch is a browser-based editor for OAS3 spec documents. It offers a side-by-side YAML code editor and visual editor with a focus on tactile feedback, simplicity and performance.
 
 ## Features
 - shows each operation as graph node
@@ -14,7 +14,7 @@ OAIE Sketch offers a side-by-side YAML code editor and visual editor with a focu
 - sync graph into yaml, sync yaml into graph
 - auto-save in localstorage of browser
 
-![oaie-sketch.png](oaie-sketch.png)
+![oaie-sketch.png](Screenshot of OAIE Sketch)
 
 ## Opinionated OAS3 YAML
 Requests, Responses and sub-objects should be their own schema definitions. Note that this is best practice anyway if you ever want to generate classes from your spec.
