@@ -1,7 +1,5 @@
 # OAIE-Sketch
-OpenAPI Visual Editor
-
-OAIE Sketch offers a side-by-side code editor and visual editor.
+OAIE Sketch offers a side-by-side YAML code editor and visual editor with a focus on tactile feedback, simplicity and performance.
 
 ## Features
 - shows each operation as graph node
@@ -33,6 +31,7 @@ Sketch can persist and load entity positions to and from this viz (inside the <!
 - Currently only tested on Chrome.
 - OAIE Sketch has an opinion about correct document structure: each schema should be declared as a named schema.
 - local storage is used as persistence. this means that currently it is only feasible to edit one spec at a time (much like the Swagger online editor).
+- OAIE Sketch is in a very early stage, please backup your documents frequently outside of it!
 
 ## TODO
 - documentation
