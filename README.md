@@ -11,6 +11,7 @@ OAIE Sketch offers a side-by-side YAML code editor and visual editor with a focu
 - detects changes and colors sync buttons
 - can add a "baked" viz into the document as a viewer storage
 - uses viz as metadata (node position) storage
+- sync graph into yaml, sync yaml into graph
 
 ![oaie-sketch.png](oaie-sketch.png)
 
@@ -32,6 +33,7 @@ Sketch can persist and load entity positions to and from this viz (inside the <!
 - OAIE Sketch has an opinion about correct document structure: each schema should be declared as a named schema.
 - local storage is used as persistence. this means that currently it is only feasible to edit one spec at a time (much like the Swagger online editor).
 - OAIE Sketch is in a very early stage, please backup your documents frequently outside of it!
+- Sync: when both are yellow, first click "<- update inline viz", then "update from editor ->"
 
 ## TODO
 - documentation
