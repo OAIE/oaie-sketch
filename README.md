@@ -1,4 +1,4 @@
-# oaie-sketch
+# OAIE-Sketch
 OpenAPI Visual Editor
 
 OAIE Sketch offers a side-by-side code editor and visual editor.
