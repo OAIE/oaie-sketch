@@ -11,6 +11,10 @@ OAIE Sketch offers a side-by-side code editor and visual editor.
 - quick action buttons for adding properties and schemas
 - clicking schemas or properties will scroll the document
 - detects changes and colors sync buttons
+- can add a "baked" viz into the document as a viewer storage
+- uses viz as metadata (node position) storage
+
+![oaie-sketch.png](oaie-sketch.png)
 
 ## VIZ
 Starting documents like this will add a viz (visualisation) into the header (this will show up as a graphic in swagger):
@@ -24,8 +28,6 @@ Starting documents like this will add a viz (visualisation) into the header (thi
         <!--OAIE.viz--><!--/OAIE.viz-->
 
 Sketch can persist and load entity positions to and from this viz (inside the <!--OAIE.viz--> tag).
-
-![oaie-sketch.png](oaie-sketch.png)
 
 ## Caveats
 - Currently only tested on Chrome.
