@@ -20,6 +20,7 @@ Starting documents like this will add a viz (visualisation) into the header (thi
 - local storage is used as persistence. this means that currently it is only feasible to edit one spec at a time (much like the Swagger online editor).
 
 ## TODO
+- documentation
 - find contributors
 - restructure project
 - refactor into smaller units
