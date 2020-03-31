@@ -22,6 +22,7 @@ Starting documents like this will add a viz (visualisation) into the header (thi
 ## TODO
 - documentation
 - find contributors
+- marketing
 - restructure project
 - refactor into smaller units
 - integrate CodeMirror as editor with yaml tooling
