@@ -1,6 +1,11 @@
 # OAIE Sketch
 OAIE Sketch is a browser-based editor for OAS3 spec documents. It offers a side-by-side YAML code editor and visual editor with a focus on tactile feedback, simplicity and performance. Its philosophy is "stay close to the code and visualize".
 
+## Installation
+Currently OAIE Sketch is only a few files plus CDN links. So your process to get it running is manual.
+- clone repository
+- open sketch.html in browser
+
 ## Features
 - shows each operation as graph node
 - shows each scheam as graph node
