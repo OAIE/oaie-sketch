@@ -85,3 +85,10 @@ Sketch persists graph node positions to the browser's localStorage, but when a v
 - find contributors
 - marketing
 - see Projects tab for planned features
+
+## Contributing
+- We want to maintain a focus on the code.
+- We want to facilitate writing better specs.
+- We want to make writing specs easier and give an easier learning curve.
+- We want to be as lightweight as possible.
+- We want to keep the dependency to libraries as low as possible.
