@@ -1,5 +1,5 @@
 # OAIE Sketch
-OAIE Sketch is a browser-based editor for OAS3 spec documents. It offers a side-by-side YAML code editor and visual editor with a focus on tactile feedback, simplicity and performance.
+OAIE Sketch is a browser-based editor for OAS3 spec documents. It offers a side-by-side YAML code editor and visual editor with a focus on tactile feedback, simplicity and performance. Its philosophy is "stay close to the code and visualize".
 
 ## Features
 - shows each operation as graph node
@@ -66,7 +66,7 @@ Starting documents like this will add a viz (visualisation) into the header (thi
         My introductory information
         <!--OAIE.viz--><!--/OAIE.viz-->
 
-Sketch can persist and load entity positions to and from this viz (inside the <!--OAIE.viz--> tag).
+Sketch persists graph node positions to the browser's localStorage, but when a viz is present, it will store and load graph node positions to and from this viz (inside the &lt;!--OAIE.viz--&gt; tag).
 
 ## Caveats
 - Currently only tested on Chrome.
@@ -79,4 +79,4 @@ Sketch can persist and load entity positions to and from this viz (inside the <!
 - documentation
 - find contributors
 - marketing
-- see Project tab for planned features
+- see Projects tab for planned features
