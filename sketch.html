@@ -85,6 +85,9 @@ textarea.fill,
 
 .changed { color: goldenrod; }
 
+.settings { background-color: yellowgreen; color: white; padding: 15px; margin: 7px 7px 0 7px; border-radius: 5px; cursor: pointer; border: 3px solid yellowgreen; font-size: 20px; }
+.settings.new { background-color: transparent; color: yellowgreen; border-style: dashed; }
+
 @media print {
 	#specEditor { display: none; }
 	#outputViewer { position: static; left: 0; }
@@ -96,14 +99,18 @@ textarea.fill,
 <body class='oaie sketch'>
 
 <div id='app' :class='{ editorWide: editorWide }'>
-	<div id='specEditor'>
+	<div id='specEditor' v-if="!settings">
+		<div v-for="(settingsKey, settingsName) in allSettings" class="settings" @click="selectSettings(settingsKey)">Keep editing spec {{ settingsName }}</div>
+		<div class="settings new" @click="newSettings()">Create new spec</div>
+	</div>
+	<div id='specEditor' v-if="settings">
 		<div class='editor'>
 			<div class='measureHelper'>Text</div>
 			<textarea wrap='off' v-model="settings.spec" @change='save(); editorChanged = true;' spellcheck="false"></textarea>
 		</div>
 		<span class='editorWideToggle' @click='editorWide = !editorWide'>{{ editorWide ? '&olt;' : '&ogt;' }}</span>
 	</div>
-	<div id='outputViewer'>
+	<div id='outputViewer' v-if="settings">
 		<div class='menu'>
 			<button @click='load' :class='{ changed: editorChanged }'>&rarr; update from editor</button>
 			<button @click='updateInlineViz' :class='{ changed: positionsChanged }'>&larr; update inline viz</button>
@@ -200,20 +207,59 @@ function Rect(x, y, w, h) {
 function init(config, i18n) {
 	var appName = 'oaie-sketch';
 	
-	var settings;
+	// TODO: the settings system is too detached from the vue app.
+	//       this created complexity. should be integrated better.
+	var settings = null;
 	var storeSettings = function() {
-		localStorage[appName + '.settings'] = JSON.stringify(settings);
+		if (!settings) return;
+		var key = appName + '.settings.' + settings.id;
+		// treat older settings as "the one settings"
+		if (settings.id == null) key = appName + '.settings';
+		localStorage[key] = JSON.stringify(settings);
 	}
-	if (localStorage[appName + '.settings'] === undefined) {
-		settings = {"locale":"en","spec":"openapi: \"3.0.0\"\ninfo:\n  version: \"0.1.0\"\n  title: OAIE Sample\n  description: |\n    https://github.com/OAIE/oaie-sketch\n    <!--OAIE.viz--><div style='height:500px;background-color:#eee;overflow:auto;position:relative;white-space:nowrap;border-radius:10px;'><span style='border-bottom:1px solid black;position:absolute;left:172.393px;top:89.9773px;width:32.75px;transform:matrix(0.934602, 0.355696, -0.355696, 0.934602, 0, 0);transform-origin:0 0;'><span style='border:1px solid black;width:5px;height:5px;position:absolute;right:0;transform:rotate(45deg);transform-origin:100% 0;border-left:0;border-bottom:0;'></span></span><span style='border-bottom:1px solid black;position:absolute;left:175.39px;top:144.458px;width:29.4688px;transform:matrix(0.936459, -0.350776, 0.350776, 0.936459, 0, 0);transform-origin:0 0;'><span style='border:1px solid black;width:5px;height:5px;position:absolute;right:0;transform:rotate(45deg);transform-origin:100% 0;border-left:0;border-bottom:0;'></span></span><div oaie-key='operation.get./sample/{sampleId}' style='border:1px solid rgb(97, 175, 254);background:rgb(240, 247, 255);position:absolute;left:28px;top:15px;width:144.391px;height:95px;padding:5px;border-radius:5px;'><div><b>get /sample/{sampleId}</b></div><div style='white-space:normal'>getSample </div><div>sampleId (string)</div></div><div oaie-key='operation.put./sample/{sampleId}' style='border:1px solid rgb(252, 161, 48);background:rgb(255, 246, 236);position:absolute;left:31px;top:124px;width:144.391px;height:95px;padding:5px;border-radius:5px;'><div><b>put /sample/{sampleId}</b></div><div style='white-space:normal'>putSample </div><div>sampleId (string)</div></div><div oaie-key='schema.Sample' style='position:absolute;left:203px;top:70px;width:86.0469px;height:96px;border:1px solid silver;background:white;padding:5px;border-radius:5px;'><div><b>Sample</b></div><div>one (string)</div><div>two (string)</div></div></div><div style='padding:5px;color:gray;float:right;'>OAIE visualization</div><!--/OAIE.viz-->\nservers:\n  - url: localhost:8080\npaths:\n  /sample/{sampleId}:\n    get:\n      operationId: getSample\n      tags:\n        - Sample\n      parameters:\n        - in: path\n          name: sampleId\n          schema:\n            type: string\n          required: true\n      responses:\n        '200':\n          description: Get the Sample\n          content:\n            application/json:\n              schema:\n                $ref: '#/components/schemas/Sample'\n    put:\n      operationId: putSample\n      tags:\n        - Sample\n      parameters:\n        - in: path\n          name: sampleId\n          schema:\n            type: string\n          required: true\n      requestBody:\n        required: true\n        content:\n          application/json:\n            schema:\n              $ref: '#/components/schemas/Sample'\n      responses:\n        '204':\n          description: No content\ncomponents:\n  schemas:\n    Sample:\n      properties:\n        one:\n          type: string\n        two:\n          type: string\n","positions":{"schema.Sample":{"x":203,"y":70},"operation.put./sample/{sampleId}":{"x":31,"y":124},"operation.get./sample/{sampleId}":{"x":28,"y":15}}};
+	var settingsCounter = 0;
+	var listSettings = function() {
+		var r = {};
+		var counter = 1;
+		for (var s in localStorage) {
+			if (s.indexOf(appName + '.settings') != 0) continue;
+			// TODO: dont do the parsing, instead do a quicker string op
+			var settings = JSON.parse(localStorage[s]);
+			var name = settings.name;
+			if (name === undefined) name = counter;
+			r[name] = s;
+			if (counter > settingsCounter) settingsCounter = counter;
+			counter++;
+		}
+		return r;
+	}
+	var loadSettings = function(key) {
+		settings = JSON.parse(localStorage[key]);
+		return settings;
+	};
+	var getNewSettings = function() {
+		var s =
+			{"locale":"en","spec":"openapi: \"3.0.0\"\ninfo:\n  version: \"0.1.0\"\n  title: OAIE Sample\n  description: |\n    https://github.com/OAIE/oaie-sketch\n    <!--OAIE.viz--><div style='height:500px;background-color:#eee;overflow:auto;position:relative;white-space:nowrap;border-radius:10px;'><span style='border-bottom:1px solid black;position:absolute;left:172.393px;top:89.9773px;width:32.75px;transform:matrix(0.934602, 0.355696, -0.355696, 0.934602, 0, 0);transform-origin:0 0;'><span style='border:1px solid black;width:5px;height:5px;position:absolute;right:0;transform:rotate(45deg);transform-origin:100% 0;border-left:0;border-bottom:0;'></span></span><span style='border-bottom:1px solid black;position:absolute;left:175.39px;top:144.458px;width:29.4688px;transform:matrix(0.936459, -0.350776, 0.350776, 0.936459, 0, 0);transform-origin:0 0;'><span style='border:1px solid black;width:5px;height:5px;position:absolute;right:0;transform:rotate(45deg);transform-origin:100% 0;border-left:0;border-bottom:0;'></span></span><div oaie-key='operation.get./sample/{sampleId}' style='border:1px solid rgb(97, 175, 254);background:rgb(240, 247, 255);position:absolute;left:28px;top:15px;width:144.391px;height:95px;padding:5px;border-radius:5px;'><div><b>get /sample/{sampleId}</b></div><div style='white-space:normal'>getSample </div><div>sampleId (string)</div></div><div oaie-key='operation.put./sample/{sampleId}' style='border:1px solid rgb(252, 161, 48);background:rgb(255, 246, 236);position:absolute;left:31px;top:124px;width:144.391px;height:95px;padding:5px;border-radius:5px;'><div><b>put /sample/{sampleId}</b></div><div style='white-space:normal'>putSample </div><div>sampleId (string)</div></div><div oaie-key='schema.Sample' style='position:absolute;left:203px;top:70px;width:86.0469px;height:96px;border:1px solid silver;background:white;padding:5px;border-radius:5px;'><div><b>Sample</b></div><div>one (string)</div><div>two (string)</div></div></div><div style='padding:5px;color:gray;float:right;'>OAIE visualization</div><!--/OAIE.viz-->\nservers:\n  - url: localhost:8080\npaths:\n  /sample/{sampleId}:\n    get:\n      operationId: getSample\n      tags:\n        - Sample\n      parameters:\n        - in: path\n          name: sampleId\n          schema:\n            type: string\n          required: true\n      responses:\n        '200':\n          description: Get the Sample\n          content:\n            application/json:\n              schema:\n                $ref: '#/components/schemas/Sample'\n    put:\n      operationId: putSample\n      tags:\n        - Sample\n      parameters:\n        - in: path\n          name: sampleId\n          schema:\n            type: string\n          required: true\n      requestBody:\n        required: true\n        content:\n          application/json:\n            schema:\n              $ref: '#/components/schemas/Sample'\n      responses:\n        '204':\n          description: No content\ncomponents:\n  schemas:\n    Sample:\n      properties:\n        one:\n          type: string\n        two:\n          type: string\n","positions":{"schema.Sample":{"x":203,"y":70},"operation.put./sample/{sampleId}":{"x":31,"y":124},"operation.get./sample/{sampleId}":{"x":28,"y":15}}}
+		;
+		s.id = new Date().getTime();
+		s.name = ++settingsCounter;
+		return s;
+	};
+	var allSettings = listSettings();
+	
+	// init empty document on first start
+	if (Object.keys(allSettings).length == 0) {
+		settings = getNewSettings();
 		storeSettings();
 	}
-	settings = JSON.parse(localStorage[appName + '.settings']);
-	var ml = i18n[settings.locale];
+
+	var ml = i18n[settings ? settings.locale : "en"];
 	
 	var setLocale = function(locale) {
-		settings.locale = locale;
-		ml = i18n[settings.locale];
+		if (settings) {
+			settings.locale = locale;
+			ml = i18n[settings.locale];
+		}
 		// we also need to tell vue the new object because we swapped the whole object out
 		app.ml = ml;
 	}
@@ -291,6 +337,7 @@ function init(config, i18n) {
 	/*var*/ app = new Vue({
 		el: '#app',
 		data: {
+			allSettings: allSettings,
 			settings: settings,
 			config: config,
 			i18n: i18n,
@@ -406,6 +453,16 @@ function init(config, i18n) {
 			},
 		},
 		methods: {
+			selectSettings(settingsKey) {
+				loadSettings(settingsKey);
+				this.settings = settings;
+				app.load();
+			}, 
+			newSettings() {
+				settings = getNewSettings();
+				this.settings = settings;
+				app.load();
+			},
 			getPositionLeft: function(key) {
 				if (settings.positions === undefined) return 0;
 				if (settings.positions[key] === undefined) return 0;
@@ -415,9 +472,6 @@ function init(config, i18n) {
 				if (settings.positions === undefined) return 0;
 				if (settings.positions[key] === undefined) return 0;
 				return settings.positions[key].y + 'px';
-			},
-			localeChanged: function(e) {
-				setLocale(e.target.value);
 			},
 			save: function(e) {
 				storeSettings();
@@ -593,7 +647,8 @@ function init(config, i18n) {
 	});
 	
 	// TODO: actually we should do that on change of the spec (?)
-	app.load();
+	if (settings)
+		app.load();
 	
 	// TODO: remove this
 	APP = app;
