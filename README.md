@@ -61,7 +61,7 @@ Requests, Responses and sub-objects should be their own schema definitions. Note
               type: string
 
 ## VIZ
-Starting documents like this will add a viz (visualisation) into the header (this will show up as a graphic in swagger):
+Beginning documents like this will add a viz (visualisation) into the header (this will show up as a graphic in swagger):
 
     openapi: "3.0.0"
     info:
@@ -70,6 +70,7 @@ Starting documents like this will add a viz (visualisation) into the header (thi
       description: |
         My introductory information
         <!--OAIE.viz--><!--/OAIE.viz-->
+    ...
 
 Sketch persists graph node positions to the browser's localStorage, but when a viz is present, it will store and load graph node positions to and from this viz (inside the &lt;!--OAIE.viz--&gt; tag).
 
