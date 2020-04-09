@@ -50,7 +50,7 @@ textarea.fill,
 #outputViewer { background-color: #eee; }
 #outputViewer .menu { position: absolute; left: 0; right: 0; top: 0; height: 30px; background-color: #eee; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; padding: 5px; }
 #outputViewer #output { position: absolute; left: 0; right: 0; top: 30px; bottom: 0; padding: 0px; overflow: auto; }
-#outputViewer #output .file { padding: 10px; border-bottom: 1px solid silver; sont-size: 9pt; }
+#outputViewer #output .file { padding: 10px; border-bottom: 1px solid silver; font-size: 9pt; }
 
 #output > div { border: 1px solid silver; position: absolute; overflow: auto; border-radius: 5px; font-size: 9pt; }
 #output > div h1 { padding: 5px; margin: 0; font-size: 10pt; }
@@ -101,8 +101,8 @@ textarea.fill,
 
 <div id='app' :class='{ editorWide: editorWide }'>
 	<div id='specEditor' v-if="!settings">
-		<div v-for="(settingsKey, settingsName) in allSettings" class="settings" @click="selectSettings(settingsKey)">Keep editing spec {{ settingsName }}</div>
-		<div class="settings new" @click="newSettings()">Create new spec</div>
+		<div v-for="(settingsKey, settingsName) in allSettings" class="settings" @click="selectSettings(settingsKey)">{{ settingsName }}</div>
+		<div class="settings new" @click="newSettings()">&plus; Create a new spec</div>
 	</div>
 	<div id='specEditor' v-if="settings">
 		<div class='editor'>
@@ -181,6 +181,12 @@ function init(config, i18n) {
 		var key = appName + '.settings.' + settings.id;
 		// treat older settings as "the one settings"
 		if (settings.id == null) key = appName + '.settings';
+		if (app.spec && app.spec.info) {
+			if (app.spec.info.title)
+				settings.name = app.spec.info.title;
+			if (app.spec.info.version)
+				settings.name += " " + app.spec.info.version;
+		}
 		localStorage[key] = JSON.stringify(settings);
 	}
 	var settingsCounter = 0;
@@ -192,7 +198,7 @@ function init(config, i18n) {
 			// TODO: dont do the parsing, instead do a quicker string op
 			var settings = JSON.parse(localStorage[s]);
 			var name = settings.name;
-			if (name === undefined) name = counter;
+			if (name === undefined) name = "Unnamed " + counter;
 			r[name] = s;
 			if (counter > settingsCounter) settingsCounter = counter;
 			counter++;
@@ -420,7 +426,7 @@ function init(config, i18n) {
 		},
 		methods: {
 			selectSettings(settingsKey) {
-				loadSettings(settingsKey);
+				settings = loadSettings(settingsKey);
 				this.settings = settings;
 				app.load();
 			}, 
