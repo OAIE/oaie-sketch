@@ -8,10 +8,43 @@
 <link rel='stylesheet' type='text/css' href='common.css' />
 <script src='common.js'></script>
 <script src='rect.js'></script>
+<script src='settings.js'></script>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/js-yaml/3.12.0/js-yaml.min.js'></script>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+<!-- swagger editor experiment
+<link href="https://editor.swagger.io/dist/swagger-editor.css" rel="stylesheet">
+<script src="https://editor.swagger.io/dist/swagger-editor-bundle.js"> </script>
+<style>
+.swagger-editor { position: absolute; left: 0; top: 0; right: 70%; bottom: 0; }
+.swagger-editor .Pane2 { display: none; }
+.swagger-editor .SplitPane { height: 100% !important; }
+.swagger-editor #ace-editor { height: 100vh !important; }
+</style>
+<script>
+function initSwaggerEditor(content) {
+	// https://github.com/swagger-api/swagger-editor/tree/master/dist
+	// TODO: evaluate if this editor is even helpful to anyone.
+	//       i would actually very much prefer a well-configured CodeMirror
+	// TODO: observe changes
+	// TODO: scroll to line
+	// TODO: in-bind content
+	// TODO: the editor bootstraps very slowly. will it help not to self-host?
+	localStorage['swagger-editor-content'] = content;
+	const editor = SwaggerEditorBundle({ dom_id: '#swaggerEditor' })
+    window.editor = editor
+	window.setTimeout(function() {
+		// TODO: getting the editor somehow kills it ... why?
+		//var editor = ace.edit('swaggerEditor');
+		//editor.scrollToLine(50, true, true, function () {});
+		//editor.gotoLine(50, 10, true);
+	}, 1000);
+}
+</script>
+<!-- -->
+
 <style>
 .menu .title { position: absolute; right: 5px; top: 5px; font-size: 12pt; font-weight: bold; }
 .menu .title .version { background-color: gray; color: white; border-radius: 10px; padding: 3px 5px; font-size: 9pt; }
@@ -169,63 +202,12 @@ textarea.fill,
 	</div>
 </div>
 
+<div id="swaggerEditor"></div>
+
 <script>
 function init(config, i18n) {
-	var appName = 'oaie-sketch';
-	
-	// TODO: the settings system is too detached from the vue app.
-	//       this created complexity. should be integrated better.
-	var settings = null;
-	var storeSettings = function() {
-		if (!settings) return;
-		var key = appName + '.settings.' + settings.id;
-		// treat older settings as "the one settings"
-		if (settings.id == null) key = appName + '.settings';
-		if (app.spec && app.spec.info) {
-			if (app.spec.info.title)
-				settings.name = app.spec.info.title;
-			if (app.spec.info.version)
-				settings.name += " " + app.spec.info.version;
-		}
-		localStorage[key] = JSON.stringify(settings);
-	}
-	var settingsCounter = 0;
-	var listSettings = function() {
-		var r = {};
-		var counter = 1;
-		for (var s in localStorage) {
-			if (s.indexOf(appName + '.settings') != 0) continue;
-			// TODO: dont do the parsing, instead do a quicker string op
-			var settings = JSON.parse(localStorage[s]);
-			var name = settings.name;
-			if (name === undefined) name = "Unnamed " + counter;
-			r[name] = s;
-			if (counter > settingsCounter) settingsCounter = counter;
-			counter++;
-		}
-		return r;
-	}
-	var loadSettings = function(key) {
-		settings = JSON.parse(localStorage[key]);
-		return settings;
-	};
-	var getNewSettings = function() {
-		var s =
-			{"locale":"en","spec":"openapi: \"3.0.0\"\ninfo:\n  version: \"0.1.0\"\n  title: OAIE Sample\n  description: |\n    https://github.com/OAIE/oaie-sketch\n    <!--OAIE.viz--><div style='height:500px;background-color:#eee;overflow:auto;position:relative;white-space:nowrap;border-radius:10px;'><span style='border-bottom:1px solid black;position:absolute;left:172.393px;top:89.9773px;width:32.75px;transform:matrix(0.934602, 0.355696, -0.355696, 0.934602, 0, 0);transform-origin:0 0;'><span style='border:1px solid black;width:5px;height:5px;position:absolute;right:0;transform:rotate(45deg);transform-origin:100% 0;border-left:0;border-bottom:0;'></span></span><span style='border-bottom:1px solid black;position:absolute;left:175.39px;top:144.458px;width:29.4688px;transform:matrix(0.936459, -0.350776, 0.350776, 0.936459, 0, 0);transform-origin:0 0;'><span style='border:1px solid black;width:5px;height:5px;position:absolute;right:0;transform:rotate(45deg);transform-origin:100% 0;border-left:0;border-bottom:0;'></span></span><div oaie-key='operation.get./sample/{sampleId}' style='border:1px solid rgb(97, 175, 254);background:rgb(240, 247, 255);position:absolute;left:28px;top:15px;width:144.391px;height:95px;padding:5px;border-radius:5px;'><div><b>get /sample/{sampleId}</b></div><div style='white-space:normal'>getSample </div><div>sampleId (string)</div></div><div oaie-key='operation.put./sample/{sampleId}' style='border:1px solid rgb(252, 161, 48);background:rgb(255, 246, 236);position:absolute;left:31px;top:124px;width:144.391px;height:95px;padding:5px;border-radius:5px;'><div><b>put /sample/{sampleId}</b></div><div style='white-space:normal'>putSample </div><div>sampleId (string)</div></div><div oaie-key='schema.Sample' style='position:absolute;left:203px;top:70px;width:86.0469px;height:96px;border:1px solid silver;background:white;padding:5px;border-radius:5px;'><div><b>Sample</b></div><div>one (string)</div><div>two (string)</div></div></div><div style='padding:5px;color:gray;float:right;'>OAIE visualization</div><!--/OAIE.viz-->\nservers:\n  - url: localhost:8080\npaths:\n  /sample/{sampleId}:\n    get:\n      operationId: getSample\n      tags:\n        - Sample\n      parameters:\n        - in: path\n          name: sampleId\n          schema:\n            type: string\n          required: true\n      responses:\n        '200':\n          description: Get the Sample\n          content:\n            application/json:\n              schema:\n                $ref: '#/components/schemas/Sample'\n    put:\n      operationId: putSample\n      tags:\n        - Sample\n      parameters:\n        - in: path\n          name: sampleId\n          schema:\n            type: string\n          required: true\n      requestBody:\n        required: true\n        content:\n          application/json:\n            schema:\n              $ref: '#/components/schemas/Sample'\n      responses:\n        '204':\n          description: No content\ncomponents:\n  schemas:\n    Sample:\n      properties:\n        one:\n          type: string\n        two:\n          type: string\n","positions":{"schema.Sample":{"x":203,"y":70},"operation.put./sample/{sampleId}":{"x":31,"y":124},"operation.get./sample/{sampleId}":{"x":28,"y":15}}}
-		;
-		s.id = new Date().getTime();
-		s.name = ++settingsCounter;
-		return s;
-	};
-	var allSettings = listSettings();
-	
-	// init empty document on first start
-	if (Object.keys(allSettings).length == 0) {
-		settings = getNewSettings();
-		storeSettings();
-	}
-
-	var ml = i18n[settings ? settings.locale : "en"];
+	var settingsSystem = new Settings();
+	var ml = i18n[settingsSystem.settings ? settingsSystem.settings.locale : "en"];
 	
 	var setLocale = function(locale) {
 		if (settings) {
@@ -294,13 +276,14 @@ function init(config, i18n) {
 				},
 				stop: function(e) {
 					connectArrows(el);
+					var settings = settingsSystem.settings;
 					var key = $(el).attr('oaie-key');
 					if (settings.positions === undefined) settings.positions = {};
 					if (settings.positions[key] === undefined) settings.positions[key] = {};
 					settings.positions[key].x = Math.round(this.style.left.replace(/[^\d\.]/g, ''));
 					settings.positions[key].y = Math.round(this.style.top.replace(/[^\d\.]/g, ''));
 					app.positionsChanged = true;
-					storeSettings();
+					settingsSystem.storeSettings();
 				}
 			});
 		}
@@ -309,8 +292,8 @@ function init(config, i18n) {
 	/*var*/ app = new Vue({
 		el: '#app',
 		data: {
-			allSettings: allSettings,
-			settings: settings,
+			allSettings: settingsSystem.allSettings,
+			settings: settingsSystem.settings,
 			config: config,
 			i18n: i18n,
 			ml: ml,
@@ -426,27 +409,28 @@ function init(config, i18n) {
 		},
 		methods: {
 			selectSettings(settingsKey) {
-				settings = loadSettings(settingsKey);
-				this.settings = settings;
+				settingsSystem.settings = settingsSystem.loadSettings(settingsKey);
+				this.settings = settingsSystem.settings;
+				if (window.initSwaggerEditor) initSwaggerEditor(this.settings.spec);
 				app.load();
 			}, 
 			newSettings() {
-				settings = getNewSettings();
+				settingsSystem.settings = settingsSystem.getNewSettings();
 				this.settings = settings;
 				app.load();
 			},
 			getPositionLeft: function(key) {
-				if (settings.positions === undefined) return 0;
-				if (settings.positions[key] === undefined) return 0;
-				return settings.positions[key].x + 'px';
+				if (this.settings.positions === undefined) return 0;
+				if (this.settings.positions[key] === undefined) return 0;
+				return this.settings.positions[key].x + 'px';
 			},
 			getPositionTop: function(key) {
-				if (settings.positions === undefined) return 0;
-				if (settings.positions[key] === undefined) return 0;
-				return settings.positions[key].y + 'px';
+				if (this.settings.positions === undefined) return 0;
+				if (this.settings.positions[key] === undefined) return 0;
+				return this.settings.positions[key].y + 'px';
 			},
 			save: function(e) {
-				storeSettings();
+				settingsSystem.storeSettings();
 			},
 			sortObject: function(object) {
 				const sorted = {};
@@ -458,7 +442,7 @@ function init(config, i18n) {
 			selectPath: function(path, selectSubString) {
 				var textarea = $('#specEditor textarea').get(0);
 				var o = 0;
-				var t = settings.spec;
+				var t = this.settings.spec;
 				path = path.split('/');
 				for (var p in path) {
 					if (path == '') continue;
@@ -481,7 +465,7 @@ function init(config, i18n) {
 				this.scrollToOffset(o);
 			},
 			scrollToOffset: function(o) {
-				var t = settings.spec;
+				var t = this.settings.spec;
 				t = t.substr(0, o);
 				var lines = t.match(/\n/g).length;
 				// TODO: it would be more elegant to create and destroy the helper on demand
@@ -498,21 +482,21 @@ function init(config, i18n) {
 				// ALSO: <<: blah - references are resolved during load and therefore lost on write.
 				
 				// if the document contains an inline viz, we restore the positions from there.
-				var divs = settings.spec.match(/<div ([^>]*)>/g)
+				var divs = this.settings.spec.match(/<div ([^>]*)>/g)
 				for (d in divs) {
 					var div = divs[d];
 					try {
 						var key = div.match(/oaie-key='([^']+)'/)[1];
 						var x = div.match(/left:([0-9\.]+)px/)[1];
 						var y = div.match(/top:([0-9\.]+)px/)[1];
-						settings.positions[key] = { x: x, y: y };
+						this.settings.positions[key] = { x: x, y: y };
 					}
 					catch (e) {
 						//console.error("could not extract position info for", div, e);
 					}
 				}
 				
-				var data = jsyaml.load(settings.spec);
+				var data = jsyaml.load(this.settings.spec);
 				console.log(data);
 				app.spec = data;
 				this.editorChanged = false;
@@ -551,7 +535,7 @@ function init(config, i18n) {
 				});
 				r += `</div>`;
 				r += `<div style='padding:5px;color:gray;float:right;'>OAIE visualization</div><!--/OAIE.viz-->`;
-				settings.spec = settings.spec.replace(/<!--OAIE.viz-->.*<!--\/OAIE.viz-->/, r);
+				this.settings.spec = this.settings.spec.replace(/<!--OAIE.viz-->.*<!--\/OAIE.viz-->/, r);
 				this.positionsChanged = false;
 				this.save();
 			},
@@ -568,8 +552,8 @@ function init(config, i18n) {
 			addSchema: function() {
 				var name = prompt("name");
 				if (name === undefined) return;
-				settings.spec += '    ' + name + ':\n      required:\n      properties:';
-				settings.spec = settings.spec.replace(/\n\n/, '\n');
+				this.settings.spec += '    ' + name + ':\n      required:\n      properties:';
+				this.settings.spec = settings.spec.replace(/\n\n/, '\n');
 				this.load();
 				// this.storeSettings();
 			},
@@ -577,15 +561,15 @@ function init(config, i18n) {
 				var name = prompt("name");
 				if (name === undefined) return;
 				// TODO: this is all very hacky
-				var s = settings.spec.indexOf(schemaName + ":");
-				var e = settings.spec.substring(s).search(/\n    [^ ]/);
-				if (e < 0) e = settings.spec.length;
+				var s = this.settings.spec.indexOf(schemaName + ":");
+				var e = this.settings.spec.substring(s).search(/\n    [^ ]/);
+				if (e < 0) e = this.settings.spec.length;
 				else e = e + s;
 				var props = '\n      properties:';
-				var p = settings.spec.indexOf(props, s);
+				var p = this.settings.spec.indexOf(props, s);
 				// add properties block if needed
 				if (p < s || p > e) {
-					settings.spec = settings.spec.slice(0, e) + props + '\n' + settings.spec.slice(e);
+					this.settings.spec = this.settings.spec.slice(0, e) + props + '\n' + this.settings.spec.slice(e);
 					p = e;
 					e = e + props.length;
 				}
@@ -598,8 +582,8 @@ function init(config, i18n) {
 					name = name.replace(/\s+\(([^\)]+)\)/, '');
 				}
 				var prop = '\n        ' + name + ':\n          type: ' + type + '\n';
-				settings.spec = settings.spec.slice(0, e) + prop + settings.spec.slice(e);
-				settings.spec = settings.spec.replace(/\n\n/, '\n');
+				this.settings.spec = this.settings.spec.slice(0, e) + prop + this.settings.spec.slice(e);
+				this.settings.spec = this.settings.spec.replace(/\n\n/, '\n');
 				this.load();
 				// TODO: select the new attribute
 				// this.storeSettings();
@@ -619,7 +603,7 @@ function init(config, i18n) {
 	});
 	
 	// TODO: actually we should do that on change of the spec (?)
-	if (settings)
+	if (settingsSystem.settings)
 		app.load();
 	
 	// TODO: remove this
