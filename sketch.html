@@ -84,7 +84,11 @@ function initSwaggerEditor(content) {
 					<b>{{ operation._method }}</b>
 					<span @click='selectPath("paths:/" + encodeURIComponent(operation._path) + ":/" + operation._method + ":")'>{{ operation._path }}</span>
 				</div>
-				<div class='description'><b>{{ operation.operationId }}</b> {{ operation.description }}</div>
+				<div class='buttonRow'>
+					<button class="mini" @click="moveAllY(operation, -50)">&uarr;</button>
+					<button class="mini" @click="moveAllY(operation, 50)">&darr;</button>
+				</div>
+				<div class='summary'><b>{{ operation.operationId }}</b> {{ operation.summary }}</div>
 				<ul>
 					<li v-for='parameter in operation.parameters'
 						v-bind:class='{ required: parameter.required }'>
@@ -424,9 +428,6 @@ function init(config, i18n) {
 				});
 			},
 			updateInlineViz: function() {
-				// TODO: improve
-				// TODO: add to description
-				// TODO: add to description live after dragging
 				var r = `<!--OAIE.viz--><div style='height:500px;background-color:#eee;overflow:auto;position:relative;white-space:nowrap;border-radius:10px;'>`;
 				$('a.arrow').each((i,o) => {
 					o = $(o);
@@ -438,7 +439,7 @@ function init(config, i18n) {
 					var colorStyle = `border:1px solid ${o.css('border-color')};background:${o.css('background-color')};`;
 					r += `<div oaie-key='${o.attr('oaie-key')}' style='${colorStyle}position:absolute;left:${o.css('left')};top:${o.css('top')};width:${o.width()}px;height:${o.height()}px;padding:5px;border-radius:5px;'>`;
 					o.find('.path').each((i,o) => { r += `<div><b>${$(o).text()}</b></div>`; });
-					o.find('.description').each((i,o) => { r += `<div style='white-space:normal'>${$(o).text()}</div>`; });
+					o.find('.summary').each((i,o) => { r += `<div style='white-space:normal'>${$(o).text()}</div>`; });
 					o.find('li span').each((i,o) => { r += `<div>${$(o).text().trim()}</div>`; });
 					r += `</div>`;
 				});
@@ -503,6 +504,20 @@ function init(config, i18n) {
 				this.load();
 				// TODO: select the new attribute
 				// this.storeSettings();
+			},
+			moveAllY: function(minY, byY) {
+				if (typeof minY == "object")
+					minY = this.settings.positions[minY._key].y;
+				for (var key in this.settings.positions) {
+					var y = Number(this.settings.positions[key].y);
+					if (y < minY - 10) continue;
+					this.settings.positions[key].y = y + byY;
+				}
+				this.positionsChanged = true;
+				settingsSystem.storeSettings();
+				Vue.nextTick(() => {
+					connectArrowsAll();
+				});
 			},
 		},
 		filters: {
