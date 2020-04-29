@@ -7,10 +7,11 @@ Currently OAIE Sketch is only a few files plus CDN links. So your process to get
 - open sketch.html in browser
 
 ## Features
-- shows each operation as graph node
-- shows each scheam as graph node
-- shows each relation as graph arrow
+- shows each operation as graph node (path, operationId, summary, parameters)
+- shows each schema as graph node (name, description, properties)
+- shows each relation as graph arrow (array-relations as dotted)
 - dragging for graph nodes
+- mass-move to make space for new content (up/down arrows in operation)
 - quick action buttons for adding properties and schemas
 - clicking schemas or properties will scroll the document
 - detects changes and colors sync buttons
@@ -91,5 +92,5 @@ Sketch persists graph node positions to the browser's localStorage, but when a v
 - We want to maintain a focus on the code.
 - We want to facilitate writing better specs.
 - We want to make writing specs easier and give an easier learning curve.
-- We want to be as lightweight as possible.
+- We want to be as lightweight as possible (currently needs Vue, JS-YAML, jQuery, jQuery UI - help on removing jQuery appreciated!).
 - We want to keep the dependency to libraries as low as possible.
