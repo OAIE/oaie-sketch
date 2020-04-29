@@ -41,6 +41,8 @@ textarea.fill,
 #output > div h1 { padding: 5px; margin: 0; font-size: 10pt; }
 #output > div ul { padding: 0 5px; }
 #output > div ul li { list-style-type: none; white-space: nowrap; }
+#output > div .buttonRow { position: absolute; top: 3px; right: 3px; }
+button.mini,
 #output > div ul li button { border: 1px solid gray; background-color: white; border-radius: 10px; width: 12px; height: 12px; line-height: 10px; display: inline-block; padding: 0; color: black; }
 #output .operation { background-color: #ffe; border-top-left-radius: 20px; }
 #output .operation .path { padding-left: 30px; padding-top: 10px; padding-right: 5px; font-weight: bold; }
@@ -62,6 +64,7 @@ textarea.fill,
 
 #output .schema { background-color: white; }
 
+#output .summary { max-width: 250px; padding: 5px 5px 0 10px; white-space: pre-wrap; }
 #output .description { max-width: 250px; padding: 5px 5px 0 10px; white-space: pre-wrap; }
 
 .arrow { transform: rotate(30deg); transform-origin: 0 0; border-width: 0px; border-style: solid; border-color: black; border-top-width: 1px; width: 100px; position: absolute; display: block; padding: 0; top: 100px; left: 100px; }
