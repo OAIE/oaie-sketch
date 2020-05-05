@@ -336,7 +336,7 @@ function init(config, i18n) {
 			}, 
 			newSettings() {
 				settingsSystem.settings = settingsSystem.getNewSettings();
-				this.settings = settings;
+				this.settings = settingsSystem.settings;
 				app.load();
 			},
 			getPositionLeft: function(key) {
