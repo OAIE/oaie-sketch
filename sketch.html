@@ -32,7 +32,7 @@ function initSwaggerEditor(content) {
 	// TODO: observe changes
 	// TODO: scroll to line
 	// TODO: in-bind content
-	// TODO: the editor bootstraps very slowly. will it help not to self-host?
+	// TODO: the editor bootstraps very slowly. will it help to self-host?
 	localStorage['swagger-editor-content'] = content;
 	const editor = SwaggerEditorBundle({ dom_id: '#swaggerEditor' })
     window.editor = editor
@@ -94,7 +94,7 @@ function initSwaggerEditor(content) {
 						v-bind:class='{ required: parameter.required }'>
 						<button>-</button>
 						<span @click='selectPath("paths:/" + encodeURIComponent(operation._path) + ":/" + operation._method + ":/parameters:/- name: " + parameter.name, parameter.name)'>
-							{{ parameter.name }} ({{ parameter.schema.type }})
+							{{ parameter.name }} ({{ parameter.schema ? parameter.schema.type : 'ERR1' }})
 						</span>
 					</li>
 					<li><button>+</button></li>
