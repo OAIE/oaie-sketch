@@ -315,7 +315,6 @@ function Settings() {
                 specStructure.id = new Date().getTime();
                 specStructure.name = ++settingsCounter;
 		specStructure.spec = xhr;
-		console.log('loaded spec', specStructure);
                 resolve(specStructure);
 	      },
 	      error: function() {
