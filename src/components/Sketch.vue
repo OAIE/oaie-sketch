@@ -594,7 +594,7 @@ export default {
       // this.storeSettings();
     },
     saveSpec: function() {
-      json(parsed.saveToFileEndpoint, 'spec', function() {
+      json(parsed.saveToFileEndpoint, jsyaml.dump(this.spec), function() {
         alert('Spec saved');
       }, function() {
         alert('Error while saving spec');
