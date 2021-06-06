@@ -311,11 +311,17 @@ function Settings() {
             $.ajax({
 	      url: parsed.saveToFileEndpoint,
 	      success: function(xhr) {
+		console.log('load spec from remote url1');
 	        var data = jsyaml.load(xhr.responseText);
+		console.log('load spec from remote url2');
                 var s = {"locale":"en","spec": data};
+		console.log('load spec from remote url3');
                 s.id = new Date().getTime();
+		console.log('load spec from remote url4');
                 s.name = ++settingsCounter;
+		console.log('load spec from remote url5');
                 resolve(s);
+		console.log('load spec from remote url6');
 	      },
 	      error: function() {
                 alert("Error while loading spec from remote url");
