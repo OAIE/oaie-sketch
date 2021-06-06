@@ -311,14 +311,10 @@ function Settings() {
             $.ajax({
 	      url: parsed.saveToFileEndpoint,
 	      success: function(xhr) {
-	        var data = jsyaml.load(xhr.responseText);
-                var s = {"locale":"en","spec": data};
-                s.id = new Date().getTime();
-                s.name = ++settingsCounter;
                 var specStructure = {"locale":"en"};
                 specStructure.id = new Date().getTime();
                 specStructure.name = ++settingsCounter;
-		specStructure.spec = s;
+		specStructure.spec = xhr.responseText;
                 resolve(specStructure);
 	      },
 	      error: function() {
