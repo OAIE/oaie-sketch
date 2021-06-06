@@ -1,0 +1,13 @@
+.eslintignore
+.eslintrc.json
+
+/.editorconfig
+/.gitattributes
+/.mailmap
+/.travis.yml
+
+/build
+/external
+/speed
+/test
+/Gruntfile.js

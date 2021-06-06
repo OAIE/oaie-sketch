@@ -1,0 +1,62 @@
+{
+  "name": "oaie-sketch",
+  "version": "1.0.1",
+  "description": "This is a simple openapi schema builder",
+  "private": false,
+  "main": "dist/index.html",
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+ "bugs": {
+    "url": "https://github.com/OAIE/oaie-sketch/issues"
+  },
+  "license": "MIT",
+  "keywords": [
+    "openapi",
+    "api",
+    "sketch"
+  ],
+  "homepage": "https://github.com/OAIE/oaie-sketch",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OAIE/oaie-sketch.git"
+  },
+  "dependencies": {
+    "core-js": "^3.6.5",
+    "jquery": "^3.6.0",
+    "js-yaml": "^3.14.1",
+    "vue": "^2.6.11",
+    "webpack-jquery-ui": "^2.0.1"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^6.8.0",
+    "eslint-plugin-vue": "^7.0.0-beta.4",
+    "vue-eslint-parser": "^7.6.0",
+    "vue-template-compiler": "^2.6.11"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/recommended",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "vue-eslint-parser"
+    },
+    "rules": {}
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}
