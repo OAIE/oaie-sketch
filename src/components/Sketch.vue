@@ -314,6 +314,7 @@ function Settings() {
                 var specStructure = {"locale":"en"};
                 specStructure.id = new Date().getTime();
                 specStructure.name = ++settingsCounter;
+		console.log(xhr);
 		specStructure.spec = xhr.responseText;
 		console.log('loaded spec', specStructure);
                 resolve(specStructure);
