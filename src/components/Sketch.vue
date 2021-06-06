@@ -308,14 +308,19 @@ function Settings() {
 	this.getNewSettings = function() {
         return new Promise(function(resolve, reject) {
           if (!!parsed.saveToFileEndpoint) {
-            $.get(parsed.saveToFileEndpoint, function(data) {
-                var s = {"locale":"en","spec": JSON.parse(data)};
+            $.ajax({
+	      url: parsed.saveToFileEndpoint,
+	      success: function(xhr) {
+	        var data = jsyaml.load(xhr.responseText);
+                var s = {"locale":"en","spec": data};
                 s.id = new Date().getTime();
                 s.name = ++settingsCounter;
                 resolve(s);
-            }).fail(function () {
-              alert("Error while loading spec from remote url");
-              reject();
+	      },
+	      error: function() {
+                alert("Error while loading spec from remote url");
+                reject();
+	      }
             });
           } else {
             var s =
